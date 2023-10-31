@@ -18,3 +18,9 @@ export const getInfo = (data) =>
         method: 'post',
         data: data,
     });
+export const dele = (data) =>
+    service({
+        url: '/article/delete',
+        method: 'post',
+        data: data,
+    });

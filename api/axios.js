@@ -53,8 +53,12 @@ service.interceptors.request.use(
     function (config) {
         const token = localStorage.getItem('token');
         config.headers['Authorization'] = token;
-
         if (
+            config.method.toLocaleLowerCase() === 'post' ||
+            config.method.toLocaleLowerCase() === 'put'
+        ) {
+            config.data;
+        } else if (
             config.method.toLocaleLowerCase() === 'get' ||
             config.method.toLocaleLowerCase() === 'delete'
         ) {
