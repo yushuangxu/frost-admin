@@ -1,5 +1,5 @@
-import { Upload } from '@/models/app';
-import { Notification, Modal } from 'antd';
+// import { Upload } from '@/models/app';
+import { notification, Modal } from 'antd';
 export const isEmpty = (val, option = {}) => {
     if (option.ignoreZero && val === 0) return true;
 
@@ -104,7 +104,7 @@ export const Toast = {
         if (isMobile) {
             Message[method](msg);
         } else {
-            Notification[method]({
+            notification[method]({
                 message,
                 description: msg,
             });

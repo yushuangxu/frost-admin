@@ -2,7 +2,7 @@ import React, { Fragment, useImperativeHandle, forwardRef } from 'react';
 import { Form } from 'antd';
 import { BaseLayout } from '@/utils/config';
 
-export const from = forwardRef((props) => {
+export default forwardRef((props) => {
     const initialValues = {};
 
     const [form] = Form.useForm();
@@ -27,6 +27,7 @@ export const from = forwardRef((props) => {
         list.forEach((name, option) => {
             initialValues[name] = option.initialValue;
         });
+
         return (
             <Form
                 form={form}
