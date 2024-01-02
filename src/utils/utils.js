@@ -20,7 +20,7 @@ export const generalUploadParams = (
     cb,
 ) => {
     let source = object ? object[field] || [] : this.state[objKey];
-    console.log(source);
+
     return {
         accept: 'image',
         action: 'app/public/upload',

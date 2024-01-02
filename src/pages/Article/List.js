@@ -16,13 +16,20 @@ import {
     PlusOutlined,
     LoadingOutlined,
 } from '@ant-design/icons';
-import { fetchArticle, fetchDel, fetchAdd } from '@/store/feafures/article';
+import {
+    fetchArticle,
+    fetchDel,
+    fetchAdd,
+    fetchInfo,
+    fetchUpdate,
+} from '@/store/feafures/article';
 import Form from '@/components/Form';
-import { isEmpty } from '@/utils/utils';
+// import { isEmpty } from '@/utils/utils';
 import Search from '@/components/Search';
 import Editor from 'for-editor';
 const { confirm } = Modal;
 import styles from './index.scss';
+import moment from 'moment';
 const getBase64 = (img, callback = (url) => {}) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -40,24 +47,49 @@ export default () => {
             onCancel() {},
         });
     };
-    const thead = ['id||120', 'title|标题', 'desc|内容', 'updateTime|更新时间'];
+    const thead = [
+        'id||120',
+        'title|标题',
+        'desc|内容',
+        'update_time|更新时间',
+    ];
     const dispatch = useDispatch();
-    const { article, isLoading } = useSelector((state) => state.article);
+    const { article, isLoading, info } = useSelector((state) => state.article);
+
     const [columns, setColumns] = useState([]);
     const [isForm, setForm] = useState(false);
     const [markdown, setMarkdown] = useState('');
     const [imageUrl, setImageUrl] = useState();
     const [modalShow, setModalShow] = useState(false);
+    const [formState, setFormState] = useState(1); // formState: 1, //1:新建表单,2:修改表单,3:查看表单 默认不能输入
     const [row] = useState({});
+    const [requst] = useState({
+        title: '',
+        desc: '',
+        image: '',
+        content: '',
+    });
     const [loading, setLoading] = useState(false);
     const getFormValue = useRef(null);
     useEffect(() => {
-        const renderOperate = generateTableParams();
+        const { renderOperate, renderMap } = generateTableParams();
 
-        setColumns(useColumns(thead, [], renderOperate, 150));
+        setColumns(useColumns(thead, renderMap, renderOperate, 150));
+
         getList();
     }, []);
-    const getInfo = (id) => {};
+
+    const getInfo = async (id) => {
+        const res = await dispatch(fetchInfo({ id })).unwrap();
+
+        Object.keys(requst).forEach((k) => {
+            row[k] = res?.[k];
+        });
+
+        setMarkdown(row?.content);
+
+        showForm(2);
+    };
     const remove = (id) => {
         showConfirm('删除?', '确定删除本条数据？', async () => {
             const done = await dispatch(fetchDel({ id })).unwrap();
@@ -76,7 +108,7 @@ export default () => {
     const generateTableParams = () => {
         const renderOperate = (t, r) => {
             const arr = [];
-            arr.push({ t: '修改', cb: () => getInfo(r.id) });
+            arr.push({ t: '修改', cb: async () => await getInfo(r.id) });
             arr.push({ t: '删除', cb: () => remove(r.id) });
             const show = arr.splice(0, arr.length);
 
@@ -93,10 +125,15 @@ export default () => {
                 );
             });
         };
-        return renderOperate;
+        const renderMap = {
+            update_time: (t, r) =>
+                moment(r.update_time).format('YYYY-DD-MM hh:ss'),
+        };
+        return { renderOperate, renderMap };
     };
-    const showForm = () => {
+    const showForm = (status) => {
         setForm(true);
+        setFormState(status);
     };
     const modal = () => {
         setModalShow(true);
@@ -108,23 +145,18 @@ export default () => {
             const msg = '请输入' + label;
             const val =
                 typeof row[name] === 'number' ? `${row[name]}` : row[name];
-            const ignoreZero = true;
-
             const rules = [{ required: true, message: msg }];
             return {
                 name,
                 label,
                 render: getFormRender(name, msg, type || 'text'),
-                option: {
-                    rules,
-                    initialValue: isEmpty(val, { ignoreZero })
-                        ? undefined
-                        : val,
-                },
+                option: { rules, initialValue: val || undefined },
             };
         });
     };
     const submit = () => {
+        const isAdd = formState === 1;
+
         if (!row.content || !row.title) {
             notification.error({
                 message: '错误',
@@ -132,6 +164,7 @@ export default () => {
             });
             return false;
         }
+
         if (getFormValue.current) {
             const form = getFormValue?.current.getForm();
             form.validateFields()
@@ -139,7 +172,10 @@ export default () => {
                     row.class_name = valid.classname;
                     row.desc = valid.desc;
                     row.tag_name = valid.tagname;
-                    const done = await dispatch(fetchAdd(row)).unwrap();
+                    if (!isAdd) row.id = info.id;
+                    const done = isAdd
+                        ? await dispatch(fetchAdd(row)).unwrap()
+                        : await dispatch(fetchUpdate(row)).unwrap();
 
                     if (done) {
                         setModalShow(false);
@@ -182,9 +218,9 @@ export default () => {
                     action="http://127.0.0.1:7001/upload/doAdd"
                     onChange={handleChange}
                 >
-                    {imageUrl ? (
+                    {imageUrl || row.image ? (
                         <img
-                            src={imageUrl}
+                            src={imageUrl ? imageUrl : row.image}
                             alt="avatar"
                             style={{ width: '100%' }}
                         />
@@ -214,6 +250,7 @@ export default () => {
 
     const renderForm = () => {
         const list = ['desc|文章描述', 'image|图片'];
+
         return (
             <Modal
                 destroyOnClose
@@ -221,7 +258,7 @@ export default () => {
                 visible={modalShow}
                 cancelText="取消"
                 okText="确认"
-                // confirmLoading={addLoading}
+                confirmLoading={!!isLoading}
                 onOk={submit}
                 onCancel={() => {
                     setModalShow(false);
@@ -245,6 +282,7 @@ export default () => {
                             bordered={false}
                             style={{ width: '94%' }}
                             className="input"
+                            defaultValue={row.title}
                             onChange={(e) => {
                                 row.title = e.target.value;
                             }}
@@ -253,6 +291,7 @@ export default () => {
                             className="publish"
                             onClick={modal}
                             type="primary"
+                            loading={isLoading}
                         >
                             发布
                         </Button>
@@ -266,7 +305,7 @@ export default () => {
                     </div>
                 </div>
                 <div className={styles.back}>
-                    <Button type="primary" onClick={() => showForm(false)}>
+                    <Button type="primary" onClick={() => setForm(false)}>
                         返回
                     </Button>
                 </div>
@@ -276,10 +315,11 @@ export default () => {
 
     const renderList = () => {
         const { list } = article || {};
+
         return (
             <Card style={{ display: isForm ? 'none' : 'block' }}>
                 {/* <Search createText="" onCreate={showFrom} /> */}
-                <Search createText="" onCreate={showForm} />
+                <Search createText="" onCreate={() => showForm(1)} />
                 <StandardTable
                     loading={!!isLoading}
                     data={list}

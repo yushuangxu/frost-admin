@@ -24,3 +24,10 @@ export const dele = (data) =>
         method: 'post',
         data: data,
     });
+
+export const update = (data) =>
+    service({
+        url: '/article/update',
+        method: 'post',
+        data: data,
+    });

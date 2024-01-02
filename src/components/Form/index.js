@@ -24,7 +24,7 @@ export default forwardRef((props) => {
         });
     };
     const renderForm = (list, layout) => {
-        list.forEach((name, option) => {
+        list.forEach(({ name, option }) => {
             initialValues[name] = option.initialValue;
         });
 
