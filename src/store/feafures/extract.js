@@ -3,66 +3,66 @@ import { trackLoadingState } from '../utils';
 import service from '../../../api/axios';
 //初始值
 const initialState = {
-    article: undefined,
+    extract: undefined,
     info: {},
     isLoading: false,
 };
-export const fetchArticle = createAsyncThunk(
-    'article/fetchArticle',
+export const fetchExtract = createAsyncThunk(
+    'extract/fetchextract',
     async (data) => {
         const res = await service({
-            url: '/article/list',
+            url: '/extract/list',
             method: 'get',
             data,
         });
         return res;
     },
 );
-export const fetchDel = createAsyncThunk('article/fetchDel', async (data) => {
+export const fetchDel = createAsyncThunk('extract/fetchDel', async (data) => {
     await service({
-        url: '/article/delete',
+        url: '/extract/delete',
         method: 'post',
         data: data,
     });
     return true;
 });
-export const fetchAdd = createAsyncThunk('article/fetchAdd', async (data) => {
+export const fetchAdd = createAsyncThunk('extract/fetchAdd', async (data) => {
     await service({
-        url: '/article/add',
+        url: '/extract/add',
         method: 'post',
         data,
     });
     return true;
 });
-export const fetchInfo = createAsyncThunk('article/fetchInfo', async (data) => {
+export const fetchInfo = createAsyncThunk('extract/fetchInfo', async (data) => {
     const res = await service({
-        url: '/article/info',
+        url: '/extract/info',
         method: 'post',
         data: data,
     });
     return res;
 });
 export const fetchUpdate = createAsyncThunk(
-    'article/fetchUpdate',
+    'extract/fetchUpdate',
     async (data) => {
         const res = await service({
-            url: '/article/update',
+            url: '/extract/update',
             method: 'post',
             data: data,
         });
         return res;
     },
 );
-export const articleSlice = createSlice({
-    name: 'article',
+export const extractSlice = createSlice({
+    name: 'extract',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        trackLoadingState(builder, fetchArticle, 'article');
+        trackLoadingState(builder, fetchExtract, 'extract');
         trackLoadingState(builder, fetchDel, 'del');
         trackLoadingState(builder, fetchAdd, 'add');
         trackLoadingState(builder, fetchInfo, 'info');
         trackLoadingState(builder, fetchUpdate, 'info');
     },
 });
-export default articleSlice.reducer;
+export default extractSlice.reducer;

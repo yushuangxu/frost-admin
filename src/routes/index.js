@@ -23,5 +23,17 @@ const rootRouter = [
             },
         ],
     },
+    {
+        name: '摘抄管理',
+        path: '/extract',
+        icon: <SendOutlined />,
+        children: [
+            {
+                name: '文章列表',
+                path: '/extract/list',
+                element: loadable(() => import('@/pages/Extract/List')),
+            },
+        ],
+    },
 ];
 export default rootRouter;
