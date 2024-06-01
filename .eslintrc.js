@@ -1,19 +1,15 @@
 module.exports = {
   root: true,
-  parser: '@babel/eslint-parser',
+  parser: ['babel-eslint', '@babel/eslint-parser'],
   env: {
     browser: true,
     node: true,
     commonjs: true,
-    es6: true
+    es6: true,
   },
   globals: {
-    __DEV__: true
+    __DEV__: true,
   },
-  extends: [
-    // ...
-    'plugin:prettier/recommended' // <==== 增加一行
-  ],
   parserOptions: {
     ecmaFeatures: {
       legacyDecorators: true,
@@ -21,16 +17,19 @@ module.exports = {
       impliedStrict: true, // 开启全局 script 模式
       jsx: true,
       allowImportExportEverywhere: false, // 仅允许 import export 语句出现在模块的顶层
-      requireConfigFile: false // 即使没有 babelrc 配置文件，也使用 babel-eslint 来解析
+      requireConfigFile: false, // 即使没有 babelrc 配置文件，也使用 babel-eslint 来解析
     },
     ecmaVersion: 2019,
     sourceType: 'module',
-    requireConfigFile: false
+    requireConfigFile: false,
   },
   // extends: ["plugin:prettier/recommended"],
   plugins: ['react'],
   rules: {
-    'accessor-pairs': ['error', { setWithoutGet: true, getWithoutSet: false }], // setter 必须有对应的 getter，getter 可以没有对应的 setter
+    'accessor-pairs': [
+      'error',
+      { setWithoutGet: true, getWithoutSet: false },
+    ], // setter 必须有对应的 getter，getter 可以没有对应的 setter
     'array-callback-return': 'error', // 数组的方法除了 forEach 之外，回调函数必须有返回值
     'block-scoped-var': 'off', // 将 var 定义的变量视为块作用域，禁止在块外使用  @reason 已经禁止使用 var 了
     'callback-return': 'off', // callback 之后必须立即 return
@@ -46,7 +45,11 @@ module.exports = {
     'dot-notation': 'off', // 禁止使用 foo['bar']，必须写成 foo.bar  @reason 当需要写一系列属性的时候，可以更统一
     eqeqeq: ['error', 'always'], // 必须使用 === 或 !==，禁止使用 == 或 !=
     'for-direction': 'error', // 禁止方向错误的 for 循环
-    'func-name-matching': ['error', 'always', { includeCommonJSModuleExports: false }], // 函数赋值给变量的时候，函数名必须与变量名一致
+    'func-name-matching': [
+      'error',
+      'always',
+      { includeCommonJSModuleExports: false },
+    ], // 函数赋值给变量的时候，函数名必须与变量名一致
     'func-names': 'off', // 函数必须有名字
     'func-style': 'off', // 必须只使用函数声明或只使用函数表达式
     'global-require': 'warn', // require 必须在全局作用域下
@@ -68,7 +71,10 @@ module.exports = {
     'max-statements': 'off', // 限制函数块中的语句数量
     'max-statements-per-line': 'off', // 限制一行中的语句数量
     'multiline-comment-style': 'off', // 约束多行注释的格式  @reason 能写注释已经不容易了，不需要限制太多
-    'new-cap': ['off', { newIsCap: true, capIsNew: false, properties: true }], // new 后面的类名必须首字母大写
+    'new-cap': [
+      'off',
+      { newIsCap: true, capIsNew: false, properties: true },
+    ], // new 后面的类名必须首字母大写
     'no-alert': 'warn', // 禁止使用 alert
     'no-array-constructor': 'error', // 禁止使用 Array 构造函数时传入的参数超过一个  @reason 参数为一个时表示创建一个指定长度的数组，比较常用
     'no-async-promise-executor': 'error', // 禁止将 async 函数做为 new Promise 的回调函数  @reason 出现这种情况时，一般不需要使用 new Promise 实现异步了
@@ -120,7 +126,12 @@ module.exports = {
     'no-invalid-this': 'off', // 禁止在类之外的地方使用 this  @reason 只允许在 class 中使用 this
     'no-irregular-whitespace': [
       'error',
-      { skipStrings: true, skipComments: true, skipRegExps: true, skipTemplates: true }
+      {
+        skipStrings: true,
+        skipComments: true,
+        skipRegExps: true,
+        skipTemplates: true,
+      },
     ], // 禁止不规则的空白
     'no-iterator': 'error', // 禁止使用 __iterator__  @reason __iterator__ 是一个已废弃的属性, 使用 [Symbol.iterator] 替代它
     'no-label-var': 'off', // 禁止 label 名称与已定义的变量重复  @reason 已经禁止使用 label 了
@@ -186,9 +197,17 @@ module.exports = {
     'no-unused-labels': 'off', // 禁止出现没用到的 label  @reason 已经禁止使用 label 了
     'no-unused-vars': [
       'error',
-      { vars: 'all', args: 'none', ignoreRestSiblings: false, caughtErrors: 'none' }
+      {
+        vars: 'all',
+        args: 'none',
+        ignoreRestSiblings: false,
+        caughtErrors: 'none',
+      },
     ], // 已定义的变量必须使用
-    'no-use-before-define': ['off', { variables: false, functions: false, classes: false }], // 变量必须先定义后使用  许多样式出现在类定义后
+    'no-use-before-define': [
+      'off',
+      { variables: false, functions: false, classes: false },
+    ], // 变量必须先定义后使用  许多样式出现在类定义后
     'no-useless-call': 'error', // 禁止出现没必要的 call 或 apply
     'no-useless-catch': 'error', // 禁止在 catch 中仅仅只是把错误 throw 出去  @reason 这样的 catch 是没有意义的，等价于直接执行 try 里的代码
     'no-useless-computed-key': 'error', // 禁止出现没必要的计算键名
@@ -237,7 +256,11 @@ module.exports = {
     'sort-imports': 'off', // 导入必须按规则排序
     'sort-keys': 'off', // 对象字面量的键名必须排好序
     'sort-vars': 'off', // 变量申明必须排好序
-    'spaced-comment': ['off', 'always', { block: { exceptions: ['*'], balanced: true } }], // 注释的斜线或 * 后必须有空格
+    'spaced-comment': [
+      'off',
+      'always',
+      { block: { exceptions: ['*'], balanced: true } },
+    ], // 注释的斜线或 * 后必须有空格
     strict: ['error', 'never'], // 禁止使用 'strict';
     'symbol-description': 'error', // 创建 Symbol 时必须传入参数
     'use-isnan': 'error', // 必须使用 isNaN(foo) 而不是 foo === NaN
@@ -322,6 +345,6 @@ module.exports = {
     'react/state-in-constructor': 'off', // 必须在构造函数中初始化 state
     'react/static-property-placement': 'error', // 类的静态属性必须使用 static 关键字定义
     'react/style-prop-object': 'off', // style 属性的取值必须是 object
-    'react/void-dom-elements-no-children': 'error' // img, br 标签中禁止有 children
-  }
-}
+    'react/void-dom-elements-no-children': 'error', // img, br 标签中禁止有 children
+  },
+};

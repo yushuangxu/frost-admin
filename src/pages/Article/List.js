@@ -30,13 +30,13 @@ import Editor from 'for-editor';
 const { confirm } = Modal;
 import styles from './index.scss';
 import moment from 'moment';
-const getBase64 = (img, callback = (url) => {}) => {
+const getBase64 = (img, callback = (url) => { }) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
 };
 export default () => {
-    const showConfirm = (title, content, on = () => {}) => {
+    const showConfirm = (title, content, on = () => { }) => {
         confirm({
             title: title,
             icon: <ExclamationCircleOutlined />,
@@ -44,7 +44,7 @@ export default () => {
             onOk() {
                 on();
             },
-            onCancel() {},
+            onCancel() { },
         });
     };
     const thead = [
@@ -184,7 +184,7 @@ export default () => {
                         getList();
                     }
                 })
-                .catch((e) => {});
+                .catch((e) => { });
         }
     };
     const handleChange = (info) => {
@@ -315,7 +315,7 @@ export default () => {
 
     const renderList = () => {
         const { list } = article || {};
-
+        console.log(article)
         return (
             <Card style={{ display: isForm ? 'none' : 'block' }}>
                 {/* <Search createText="" onCreate={showFrom} /> */}

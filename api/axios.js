@@ -27,7 +27,7 @@ const service = axios.create({
 //返回结果处理
 const responseHandle = {
     200: (response) => {
-        return response.data.data;
+        return response.data;
     },
     401: (response) => {
         notification.error({
@@ -69,7 +69,6 @@ service.interceptors.request.use(
                 description: '不允许此类请求!',
             });
         }
-
         return config;
     },
     function (error) {

@@ -38,7 +38,7 @@ export const generalUploadParams = (
             try {
                 const res = await Upload(params.file);
                 console.log(res);
-            } catch (err) {}
+            } catch (err) { }
         },
         onChange: (data) => {
             const { fileList, file } = data;
@@ -112,7 +112,7 @@ export const Toast = {
     },
 
     confirm(option) {
-        const emptyFn = () => {};
+        const emptyFn = () => { };
         const { icon, title, content, onOk, onCancel, ...reset } = option;
         return Modal.confirm({
             icon: icon || undefined,
@@ -126,3 +126,4 @@ export const Toast = {
         });
     },
 };
+

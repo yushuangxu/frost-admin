@@ -10,12 +10,13 @@ const initialState = {
 export const fetchArticle = createAsyncThunk(
     'article/fetchArticle',
     async (data) => {
+
         const res = await service({
             url: '/article/list',
             method: 'get',
             data,
         });
-        return res;
+        return res.data;
     },
 );
 export const fetchDel = createAsyncThunk('article/fetchDel', async (data) => {
@@ -40,7 +41,7 @@ export const fetchInfo = createAsyncThunk('article/fetchInfo', async (data) => {
         method: 'post',
         data: data,
     });
-    return res;
+    return res.data;
 });
 export const fetchUpdate = createAsyncThunk(
     'article/fetchUpdate',
@@ -50,7 +51,7 @@ export const fetchUpdate = createAsyncThunk(
             method: 'post',
             data: data,
         });
-        return res;
+        return res.data;
     },
 );
 export const articleSlice = createSlice({

@@ -15,7 +15,7 @@ export const fetchExtract = createAsyncThunk(
             method: 'get',
             data,
         });
-        return res;
+        return res.data;
     },
 );
 export const fetchDel = createAsyncThunk('extract/fetchDel', async (data) => {
@@ -40,7 +40,7 @@ export const fetchInfo = createAsyncThunk('extract/fetchInfo', async (data) => {
         method: 'post',
         data: data,
     });
-    return res;
+    return res.data;
 });
 export const fetchUpdate = createAsyncThunk(
     'extract/fetchUpdate',
@@ -50,7 +50,7 @@ export const fetchUpdate = createAsyncThunk(
             method: 'post',
             data: data,
         });
-        return res;
+        return res.data;
     },
 );
 export const extractSlice = createSlice({

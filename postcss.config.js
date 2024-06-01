@@ -1,4 +1,5 @@
 module.exports = {
-    ident: "postcss",
-    plugins: [require("autoprefixer")],
+    ident: 'postcss',
+    // eslint-disable-next-line global-require
+    plugins: [require('autoprefixer')],
 };

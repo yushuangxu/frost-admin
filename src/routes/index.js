@@ -2,6 +2,7 @@ import React from 'react';
 import loadable from '@loadable/component';
 import Loading from '@/components/Loading';
 import { SendOutlined, HomeOutlined } from '@ant-design/icons';
+
 const rootRouter = [
     {
         name: '首页',
